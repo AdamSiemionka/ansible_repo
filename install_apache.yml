@@ -11,3 +11,39 @@
       - php
      state: latest
      update_cache: yes
+
+  - name: copy default html site
+    copy:
+     src: welcome_site.html
+     dest: /var/www/html/index.html
+     owner: root
+     group: root
+     mode: 0644
+
+  - name: start httpd service
+    service:
+     name: httpd
+     state: started
+     enabled: yes
+
+  - name: add port 80 exec
+    command:
+     cmd: "firewall-cmd --add-port=80/tcp --permanent"
+    register: dfout
+
+  - debug: var=dfout.stdout_lines
+
+  - name: reload firewall rules
+    command:
+     cmd: "firewall-cmd --reload"
+    register: dfout
+
+  - debug: var=dfout.stdout_lines
+
+
+  - name: list fw rules
+    command:
+     cmd: "firewall-cmd --list-all"
+    register: dfout
+
+  - debug: var=dfout.stdout_lines

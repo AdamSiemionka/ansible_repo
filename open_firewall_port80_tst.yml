@@ -1,0 +1,34 @@
+---
+
+- hosts: tst
+  become: true
+  tasks:
+
+  - name: list fw rules 
+    command:
+     cmd: "firewall-cmd --list-all"
+    register: dfout
+
+  - debug: var=dfout.stdout_lines
+
+  - name: add port 80 exec
+    command:
+     cmd: "firewall-cmd --add-port=80/tcp --permanent"
+    register: dfout 
+
+  - debug: var=dfout.stdout_lines
+
+  - name: reload firewall rules 
+    command:
+     cmd: "firewall-cmd --reload"
+    register: dfout
+
+  - debug: var=dfout.stdout_lines
+
+
+  - name: list fw rules
+    command:
+     cmd: "firewall-cmd --list-all"
+    register: dfout
+
+  - debug: var=dfout.stdout_lines
